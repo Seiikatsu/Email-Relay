@@ -1,0 +1,35 @@
+image: docker.seikatsu.io/docker-node
+
+# define the stages that should run
+stages:
+  - install
+  - build
+
+# cache can be used to save files that need to be used for different stages
+cache:
+  paths:
+    - "node_modules"
+
+# install project dependencies
+install_dependencies:
+  stage: install
+  script:
+    # install dependencies for root project and all modules
+    - npm install
+
+
+# create production ready application and container
+build_project:
+  stage: build
+  script:
+    - npm run build
+    - cp -a src/configs dist
+    - docker build --no-cache -t email-relay .
+    # login to ensure the ci has permission to push the build
+    - docker login -u "$DOCKER_LOGIN_USER" -p "$DOCKER_LOGIN_PASS" "$DOCKER_REGISTRY"
+    # create the tag
+    - docker tag email-relay "$DOCKER_REGISTRY/email-relay:latest"
+    # push the image
+    - docker push "$DOCKER_REGISTRY/email-relay:latest"
+  only:
+    - master
