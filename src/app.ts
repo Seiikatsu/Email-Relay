@@ -1,15 +1,16 @@
-process.env['NODE_CONFIG_DIR'] = __dirname + '/configs';
+process.env["NODE_CONFIG_DIR"] = __dirname + "/configs";
 
-import compression from 'compression';
-import cookieParser from 'cookie-parser';
-import cors from 'cors';
-import config from 'config';
-import express from 'express';
-import helmet from 'helmet';
-import morgan from 'morgan';
-import { Routes } from './interfaces/routes.interface';
-import errorMiddleware from './middlewares/error.middleware';
-import { logger, stream } from './utils/logger';
+import compression from "compression";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import config from "config";
+import express from "express";
+import helmet from "helmet";
+import morgan from "morgan";
+import rateLimit from "express-rate-limit";
+import { Routes } from "./interfaces/routes.interface";
+import errorMiddleware from "./middlewares/error.middleware";
+import { logger, stream } from "./utils/logger";
 
 class App {
   public app: express.Application;
@@ -19,7 +20,10 @@ class App {
   constructor(routes: Routes[]) {
     this.app = express();
     this.port = process.env.PORT || 3000;
-    this.env = process.env.NODE_ENV || 'development';
+    this.env = process.env.NODE_ENV || "development";
+    if (this.env === "production") {
+      this.app.set("trust proxy", 1);
+    }
 
     this.initializeMiddlewares();
     this.initializeRoutes(routes);
@@ -27,7 +31,9 @@ class App {
   }
 
   public listen() {
-    this.app.listen(this.port, () => logger.info(`App listening on port ${this.port}`));
+    this.app.listen(this.port, () =>
+      logger.info(`App listening on port ${this.port}`)
+    );
   }
 
   public getServer() {
@@ -35,8 +41,21 @@ class App {
   }
 
   private initializeMiddlewares() {
-    this.app.use(morgan(config.get('log.format'), { stream }));
-    this.app.use(cors({ origin: config.get('cors.origin'), credentials: config.get('cors.credentials') }));
+    if (this.env === "production") {
+      this.app.use(
+        rateLimit({
+          windowMs: 15 * 60 * 1000, // 15 minutes
+          max: 1,
+        })
+      );
+    }
+    this.app.use(morgan(config.get("log.format"), { stream }));
+    this.app.use(
+      cors({
+        origin: config.get("cors.origin"),
+        credentials: config.get("cors.credentials"),
+      })
+    );
     this.app.use(helmet());
     this.app.use(compression());
     this.app.use(express.json());
@@ -45,8 +64,8 @@ class App {
   }
 
   private initializeRoutes(routes: Routes[]) {
-    routes.forEach(route => {
-      this.app.use('/', route.router);
+    routes.forEach((route) => {
+      this.app.use("/", route.router);
     });
   }
 
