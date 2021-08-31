@@ -12,14 +12,15 @@
     "module": "commonjs",
     "pretty": true,
     "sourceMap": true,
-    "declaration": true,
+    "declaration": false,
     "outDir": "./dist",
     "allowJs": true,
     "noEmit": false,
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "importHelpers": true,
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "removeComments": true
   },
   "include": ["src/**/*.ts", "src/**/*.json", ".env"],
   "exclude": ["node_modules"]
