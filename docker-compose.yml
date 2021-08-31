@@ -1,8 +1,16 @@
 version: "3.7"
 services:
-  cms:
+  email-relay:
     image: docker-sio-releases.seikatsu.io/email-relay:latest
     container_name: email-relay
     restart: always
-    ports:
-      - "3000:3000"
+    environment:
+      - MAIL_USER=mail-user-login
+      - MAIL_PASS=mail-pass-login
+    networks:
+      dockerized:
+        aliases:
+          - email-relay.docker.local
+networks:
+  dockerized:
+    external: true
