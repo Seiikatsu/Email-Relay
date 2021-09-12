@@ -5,7 +5,8 @@
   "author": ".Seikatsu",
   "license": "ISC",
   "scripts": {
-    "start": "cross-env NODE_ENV=development nodemon",
+    "start:dev": "cross-env NODE_ENV=development nodemon",
+    "start:prod": "cross-env NODE_ENV=production nodemon",
     "build": "tsc -p tsconfig.json"
   },
   "dependencies": {

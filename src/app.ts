@@ -10,6 +10,7 @@ import morgan from "morgan";
 import rateLimit from "express-rate-limit";
 import { Routes } from "./interfaces/routes.interface";
 import errorMiddleware from "./middlewares/error.middleware";
+import authMiddleware from "./middlewares/auth.middleware";
 import { logger, stream } from "./utils/logger";
 
 class App {
@@ -61,6 +62,7 @@ class App {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(cookieParser());
+    this.app.use(authMiddleware);
   }
 
   private initializeRoutes(routes: Routes[]) {
