@@ -2,6 +2,7 @@ import { SendEmailDto } from "../dtos/emails.dto";
 import { HttpException } from "../exceptions/HttpException";
 import nodemailer from "nodemailer";
 import { logger } from "../utils/logger";
+import sanitizeHtml from "sanitize-html";
 
 const smtpConfig = {
   host: "mail.seikatsu.io",
@@ -19,10 +20,12 @@ export default class EmailService {
   async sendEmail(data: SendEmailDto) {
     try {
       await transport.sendMail({
-        from: data.email,
+        from: sanitizeHtml(data.email),
         to: "seikatsu@seikatsu.io",
-        subject: data.subject,
-        text: `Name: ${data.name}\nMessage: ${data.text}`,
+        subject: sanitizeHtml(data.subject),
+        text: `Name: ${sanitizeHtml(data.name)}\nMessage: ${sanitizeHtml(
+          data.text
+        )}`,
       });
     } catch (e) {
       logger.error("Could not send e-mail: ", e);
