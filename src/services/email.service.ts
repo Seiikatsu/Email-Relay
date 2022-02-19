@@ -24,7 +24,7 @@ export default class EmailService {
         to: "seikatsu@seikatsu.io",
         subject: sanitizeHtml(data.subject),
         text: `Name: ${sanitizeHtml(data.name)}\nMessage: ${sanitizeHtml(
-          data.text
+          data.content
         )}`,
       });
     } catch (e) {

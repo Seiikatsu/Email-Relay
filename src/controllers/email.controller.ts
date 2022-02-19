@@ -24,8 +24,8 @@ class EmailController {
       if (isEmpty(emailData.subject)) {
         throw new HttpException(400, 'The subject should not be empty.');
       }
-      if (isEmpty(emailData.text)) {
-        throw new HttpException(400, 'The text should not be empty.');
+      if (isEmpty(emailData.content)) {
+        throw new HttpException(400, 'The content should not be empty.');
       }
 
       await this.emailService.sendEmail(emailData);

@@ -12,5 +12,5 @@ export class SendEmailDto {
     public subject: string;
     
     @IsString()
-    public text: string;
+    public content: string;
 }

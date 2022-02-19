@@ -1,14 +1,18 @@
 {
-    "env": "production",
-    "log": {
-        "format": "combined",
-        "dir": "../logs"
-    },
-    "cors": {
-        "origin": "*.seikatsu.io",
-        "credentials": true
-    },
-    "domains": [
-        "(^|^[^:]+:\\/\\/|[^\\.]+\\.)seikatsu\\.io"
-    ]
+	"env": "production",
+	"log": {
+		"format": "combined",
+		"dir": "../logs"
+	},
+	"cors": {
+		"origin": [
+			"*.seikatsu.io",
+			"*.plusk.at"
+		],
+		"credentials": true
+	},
+	"domains": [
+		"(^|^[^:]+:\\/\\/|[^\\.]+\\.)seikatsu\\.io",
+		"(^|^[^:]+:\\/\\/|[^\\.]+\\.)plusk\\.at"
+	]
 }

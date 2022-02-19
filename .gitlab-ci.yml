@@ -1,4 +1,4 @@
-image: docker.seikatsu.io/docker-node
+image: docker.seikatsu.io/docker-node:16.14.0
 
 # define the stages that should run
 stages:
